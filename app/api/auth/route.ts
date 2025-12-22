@@ -11,7 +11,12 @@ function getSupabaseConfig() {
 
 function createRouteSupabaseClient(request: NextRequest, response: NextResponse) {
   const cfg = getSupabaseConfig();
-  if (!cfg) throw new Error("Missing Supabase env (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY)");
+  if (!cfg) {
+    throw new Error(
+      "Missing Supabase env (NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY). " +
+        "If deploying on Vercel: Project Settings → Environment Variables → add these values, then redeploy.",
+    );
+  }
   return createServerClient(cfg.url, cfg.anonKey, {
     cookies: {
       getAll() {
@@ -33,11 +38,9 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.json({});
     supabase = createRouteSupabaseClient(request, response);
   } catch (e) {
-    // Treat missing Supabase config as "anonymous" so the app can still boot and show /login,
-    // instead of hard-crashing on the homepage with a 500.
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Missing Supabase config" },
-      { status: 401 },
+      { status: 503 },
     );
   }
 
@@ -109,7 +112,7 @@ export async function POST(request: NextRequest) {
     } catch (e) {
       return NextResponse.json(
         { error: e instanceof Error ? e.message : "Missing Supabase config" },
-        { status: 500 },
+        { status: 503 },
       );
     }
     const { error } = await supabase.auth.signOut();
@@ -129,7 +132,7 @@ export async function POST(request: NextRequest) {
     } catch (e) {
       return NextResponse.json(
         { error: e instanceof Error ? e.message : "Missing Supabase config" },
-        { status: 500 },
+        { status: 503 },
       );
     }
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -144,7 +147,7 @@ export async function POST(request: NextRequest) {
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Missing Supabase config" },
-      { status: 500 },
+      { status: 503 },
     );
   }
   const { error } = await supabase.auth.signUp({

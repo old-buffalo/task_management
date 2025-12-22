@@ -87,6 +87,15 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
+### Deploy lên Vercel
+
+- **Bắt buộc**: vào **Vercel → Project → Settings → Environment Variables** và thêm:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - (tuỳ chọn) `SUPABASE_SERVICE_ROLE_KEY` nếu bạn có route/logic cần service role
+- **Chọn đúng môi trường**: Production (và Preview nếu bạn dùng preview deployments)
+- **Redeploy** sau khi thêm env (vì biến `NEXT_PUBLIC_*` được inject trong build)
+
 ### Cấu hình Supabase
 
 #### Option A: Supabase Cloud (khuyến nghị nếu chỉ cần kết nối nhanh)
