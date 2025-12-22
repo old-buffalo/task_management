@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff1b8;
+  --foreground: #0f172a;
+
+  --card: rgba(255, 255, 255, 0.72);
+  --card-2: rgba(255, 255, 255, 0.52);
+  --border: rgba(15, 23, 42, 0.14);
+
+  --muted: rgba(15, 23, 42, 0.72);
+  --muted-2: rgba(15, 23, 42, 0.56);
+
+  --accent: 99 102 241; /* indigo-500 */
+  --accent-2: 56 189 248; /* sky-400 */
+  --danger: 248 113 113; /* red-400 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-roboto);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/*
+  Next.js dev overlay mounts into <nextjs-portal> and positions it at (top/left: 0).
+  Browser preview cleared those values; persist by overriding here.
+  Harmless in production (element doesn't exist).
+*/
+nextjs-portal {
+  top: unset !important;
+  left: unset !important;
+}
+
+/* subtle grid backdrop */
+.wm-bg {
+  background:
+    radial-gradient(1200px 600px at 15% 0%, rgba(var(--accent), 0.14), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(var(--accent-2), 0.10), transparent 55%),
+    radial-gradient(circle at 1px 1px, rgba(15, 23, 42, 0.06) 1px, transparent 0);
+  background-size: auto, auto, 24px 24px;
+}
+
+@layer components {
+  .wm-card {
+    @apply rounded-3xl border shadow-sm;
+    border-color: var(--border);
+    background: var(--card);
+    backdrop-filter: blur(10px);
+  }
+
+  .wm-card-2 {
+    @apply rounded-2xl border;
+    border-color: var(--border);
+    background: var(--card-2);
+    backdrop-filter: blur(10px);
+  }
+
+  .wm-input {
+    @apply h-11 w-full rounded-2xl border px-4 text-sm outline-none transition;
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--foreground);
+  }
+  .wm-input::placeholder {
+    color: rgba(15, 23, 42, 0.45);
+  }
+  .wm-input:focus {
+    border-color: rgba(var(--accent), 0.55);
+    box-shadow: 0 0 0 4px rgba(var(--accent), 0.18);
+  }
+
+  .wm-btn {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-2xl border px-4 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60;
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.68);
+    color: var(--foreground);
+  }
+  .wm-btn:hover {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .wm-btn-primary {
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-60;
+    background: linear-gradient(135deg, rgb(var(--accent)) 0%, rgb(var(--accent-2)) 100%);
+    box-shadow:
+      0 10px 30px rgba(var(--accent), 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .wm-btn-primary:hover {
+    filter: brightness(1.03);
+  }
+
+  .wm-pill {
+    @apply inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium;
+    border-color: var(--border);
+    background: rgba(255, 255, 255, 0.60);
+    color: var(--muted);
+  }
+
+  .wm-danger {
+    @apply rounded-2xl border px-4 py-3 text-sm;
+    border-color: rgba(var(--danger), 0.35);
+    background: rgba(var(--danger), 0.10);
+    color: rgba(15, 23, 42, 0.92);
+  }
+}
+

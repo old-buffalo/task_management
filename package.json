@@ -4,14 +4,26 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:local": "npm run supabase:start && npm run supabase:env && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node ./scripts/seed-demo.mjs",
+    "supabase:start": "npx --yes supabase start",
+    "supabase:stop": "npx --yes supabase stop",
+    "supabase:status": "npx --yes supabase status",
+    "supabase:reset": "npx --yes supabase db reset --yes",
+    "supabase:env": "node ./scripts/supabase-env.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.8.0",
+    "@supabase/supabase-js": "^2.88.0",
+    "dotenv": "^17.2.3",
+    "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.1",
-    "react-dom": "19.2.1"
+    "react-dom": "19.2.1",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
