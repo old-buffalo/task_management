@@ -31,6 +31,10 @@
 - ✅ API Routes bảo mật
 - ✅ Type-safe với TypeScript
 
+## 📘 Hướng dẫn sử dụng
+
+Xem chi tiết tại: `docs/HUONG_DAN_SU_DUNG.md`
+
 ## 🗂️ Cấu trúc Project
 
 ```
