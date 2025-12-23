@@ -30,26 +30,28 @@ export function Header({ profile }: { profile: Profile }) {
         <div className="flex items-center gap-2">
           <Link
             href="/dashboard"
-            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3"
+            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3 lg:hidden"
           >
             <LayoutDashboard className="h-4 w-4" />
             Dashboard
           </Link>
           <Link
             href="/team"
-            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3"
+            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3 lg:hidden"
           >
             <Users className="h-4 w-4" />
             Team
           </Link>
           <Link
             href="/workspace"
-            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3"
+            className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3 lg:hidden"
           >
             <Layers className="h-4 w-4" />
             Workspace
           </Link>
-          <NotificationsBell />
+          <div className="lg:hidden">
+            <NotificationsBell />
+          </div>
           <button
             onClick={logout}
             className="wm-btn h-9 shrink-0 whitespace-nowrap rounded-xl px-3"

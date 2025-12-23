@@ -12,6 +12,7 @@ export function NotificationsBell() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const timerRef = useRef<number | null>(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   const badge = useMemo(() => (unreadCount > 99 ? "99+" : String(unreadCount)), [unreadCount]);
 
@@ -77,8 +78,31 @@ export function NotificationsBell() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(e: PointerEvent) {
+      const root = rootRef.current;
+      const target = e.target as Node | null;
+      if (!root || !target) return;
+      if (!root.contains(target)) setOpen(false);
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+
+    // Use capture so it still closes even if something stops propagation.
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}

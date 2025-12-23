@@ -105,9 +105,9 @@ export default function Home() {
   if (session.state === "anon") {
     return (
       <div className="wm-bg flex min-h-dvh items-center justify-center px-4">
-        <div className="w-full max-w-md wm-card p-6">
-          <h1 className="text-xl font-semibold tracking-tight text-white">Work Management</h1>
-          <p className="mt-2 text-sm text-[rgba(232,235,245,0.72)]">
+        <div className="w-full max-w-md wm-card p-6 text-black">
+          <h1 className="text-xl font-semibold tracking-tight text-black">Work Management</h1>
+          <p className="mt-2 text-sm text-black/70">
             Bạn cần đăng nhập để xem và quản lý công việc.
           </p>
           {error ? (
@@ -129,32 +129,34 @@ export default function Home() {
   return (
     <AppShell profile={session.profile}>
       <div className="space-y-4">
-        <div className="wm-card p-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="min-w-0">
-              <h1 className="truncate text-base font-semibold tracking-tight text-black">Work Management</h1>
-              <div className="mt-1 text-xs text-black/70">
-                Tìm nhanh công việc theo tiêu đề / mô tả
+        <div className="sticky top-16 z-10">
+          <div className="wm-card p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <h1 className="truncate text-base font-semibold tracking-tight text-black">Work Management</h1>
+                <div className="mt-1 text-xs text-black/70">
+                  Tìm nhanh công việc theo tiêu đề / mô tả
+                </div>
               </div>
-            </div>
-            <div className="relative w-full sm:max-w-sm">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
-              <input
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search…"
-                className="wm-input pl-10 pr-10"
-              />
-              {searchText ? (
-                <button
-                  type="button"
-                  onClick={() => setSearchText("")}
-                  className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl hover:bg-black/5"
-                  aria-label="Clear search"
-                >
-                  <X className="h-4 w-4 text-black/60" />
-                </button>
-              ) : null}
+              <div className="relative w-full sm:max-w-sm">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
+                <input
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  placeholder="Search…"
+                  className="wm-input pl-10 pr-10"
+                />
+                {searchText ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchText("")}
+                    className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl hover:bg-black/5"
+                    aria-label="Clear search"
+                  >
+                    <X className="h-4 w-4 text-black/60" />
+                  </button>
+                ) : null}
+              </div>
             </div>
           </div>
         </div>

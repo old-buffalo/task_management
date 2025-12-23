@@ -34,26 +34,54 @@ function statusLabel(s: TaskStatus) {
 
 function StatusIcon({ status }: { status: TaskStatus }) {
   const cls = "h-4 w-4";
-  if (status === "completed") return <CheckCircle2 className={`${cls} text-emerald-600`} />;
-  if (status === "cancelled") return <XCircle className={`${cls} text-red-600`} />;
-  if (status === "in_progress") return <Clock3 className={`${cls} text-blue-600`} />;
-  if (status === "review") return <Circle className={`${cls} text-amber-600`} />;
+  if (status === "completed") return <CheckCircle2 className={`${cls} text-emerald-700`} />;
+  if (status === "cancelled") return <XCircle className={`${cls} text-red-700`} />;
+  if (status === "in_progress") return <Clock3 className={`${cls} text-blue-700`} />;
+  if (status === "review") return <Circle className={`${cls} text-amber-700`} />;
   return <Circle className={`${cls} text-zinc-400`} />;
 }
 
 function statusCardClass(status: TaskStatus) {
-  // Light theme: subtle tint + border per status
+  // Light theme: bolder tint + border per status
   switch (status) {
     case "in_progress":
-      return "border-blue-200 bg-blue-50/70";
+      return "border-blue-300 bg-blue-100/80";
     case "review":
-      return "border-amber-200 bg-amber-50/70";
+      return "border-amber-300 bg-amber-100/80";
     case "completed":
-      return "border-emerald-200 bg-emerald-50/70";
+      return "border-emerald-300 bg-emerald-100/80";
     case "cancelled":
-      return "border-red-200 bg-red-50/70";
+      return "border-red-300 bg-red-100/80";
     default:
-      return "border-zinc-200 bg-white";
+      return "border-black/10 bg-white/80";
+  }
+}
+
+function statusBadgeClass(status: TaskStatus) {
+  switch (status) {
+    case "in_progress":
+      return "border-blue-300 bg-blue-200/70 text-blue-950";
+    case "review":
+      return "border-amber-300 bg-amber-200/70 text-amber-950";
+    case "completed":
+      return "border-emerald-300 bg-emerald-200/70 text-emerald-950";
+    case "cancelled":
+      return "border-red-300 bg-red-200/70 text-red-950";
+    default:
+      return "border-black/10 bg-black/[0.04] text-black/80";
+  }
+}
+
+function priorityBadgeClass(priority: Task["priority"]) {
+  switch (priority) {
+    case "low":
+      return "border-sky-300 bg-sky-200/70 text-sky-950";
+    case "medium":
+      return "border-indigo-300 bg-indigo-200/70 text-indigo-950";
+    case "high":
+      return "border-orange-300 bg-orange-200/70 text-orange-950";
+    case "urgent":
+      return "border-rose-300 bg-rose-200/70 text-rose-950";
   }
 }
 
@@ -234,19 +262,19 @@ export function TaskList({
                   <div className="truncate text-sm font-semibold">{t.title}</div>
                 </div>
                 {t.description ? (
-                  <div className="mt-1 whitespace-pre-wrap text-sm text-black">
+                  <div className="mt-1 whitespace-pre-wrap text-sm text-black/85">
                     {t.description}
                   </div>
                 ) : null}
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-zinc-600 dark:text-zinc-300">
-                  <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+                  <span className={`rounded-full border px-2 py-1 font-semibold ${statusBadgeClass(t.status)}`}>
                     {statusLabel(t.status)}
                   </span>
-                  <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 uppercase dark:border-zinc-800 dark:bg-zinc-900">
+                  <span className={`rounded-full border px-2 py-1 font-semibold uppercase ${priorityBadgeClass(t.priority)}`}>
                     {t.priority}
                   </span>
                   {t.due_date ? (
-                    <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2 py-1 dark:border-zinc-800 dark:bg-zinc-900">
+                    <span className="rounded-full border border-black/10 bg-black/[0.04] px-2 py-1 text-black/80">
                       Due: {new Date(t.due_date).toLocaleDateString("vi-VN")}
                     </span>
                   ) : null}

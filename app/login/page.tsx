@@ -41,17 +41,17 @@ export default function LoginPage() {
 
   return (
     <div className="wm-bg flex min-h-dvh items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md wm-card p-6">
+      <div className="w-full max-w-md wm-card p-6 text-black">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-xl font-semibold tracking-tight text-white">
+          <h1 className="text-xl font-semibold tracking-tight text-black">
             {mode === "login" ? "Đăng nhập" : "Tạo tài khoản"}
           </h1>
-          <Link href="/" className="text-sm font-medium text-[rgba(232,235,245,0.72)] hover:text-white">
+          <Link href="/" className="text-sm font-medium text-black hover:opacity-80">
             Home
           </Link>
         </div>
 
-        <p className="mt-2 text-sm text-[rgba(232,235,245,0.72)]">
+        <p className="mt-2 text-sm text-black">
           {mode === "login"
             ? "Dùng email/password trong Supabase Auth."
             : "Đăng ký nhanh, sau đó có thể gán role/department/team trong Supabase."}
@@ -100,7 +100,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="wm-btn"
+            className="wm-btn text-black"
           >
             {mode === "login" ? "Chưa có tài khoản? Đăng ký" : "Đã có tài khoản? Đăng nhập"}
           </button>

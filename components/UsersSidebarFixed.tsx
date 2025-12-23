@@ -60,7 +60,6 @@ export function UsersSidebarFixed() {
       if (timerRef.current) window.clearInterval(timerRef.current);
       timerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
