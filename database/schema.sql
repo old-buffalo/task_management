@@ -113,12 +113,16 @@ create table if not exists task_comments (
   id uuid primary key default gen_random_uuid(),
   task_id uuid not null references tasks(id) on delete cascade,
   author_id uuid references profiles(id) on delete set null,
+  attachment_id uuid references task_attachments(id) on delete set null,
   content text not null,
   created_at timestamptz not null default now()
 );
 
 create index if not exists idx_task_comments_task_id_created_at
   on task_comments(task_id, created_at desc);
+
+create index if not exists idx_task_comments_attachment_id
+  on task_comments(attachment_id);
 
 create table if not exists task_attachments (
   id uuid primary key default gen_random_uuid(),

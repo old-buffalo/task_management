@@ -20,6 +20,9 @@
 # supabase local artifacts
 /supabase/.temp/
 
+# local temp reference files
+/.tmp/
+
 # production
 /build
 

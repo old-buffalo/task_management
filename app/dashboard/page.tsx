@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { Profile } from "@/lib/types";
 import { AppShell } from "@/components/AppShell";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 type Status = "pending" | "in_progress" | "review" | "completed" | "cancelled";
 
@@ -78,13 +79,7 @@ export default function DashboardPage() {
   }, [session.state]);
 
   if (session.state === "loading") {
-    return (
-      <div className="wm-bg flex min-h-dvh items-center justify-center">
-        <div className="rounded-2xl border border-zinc-200 bg-white px-5 py-4 text-sm text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-          Đang tải...
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (session.state === "anon") {

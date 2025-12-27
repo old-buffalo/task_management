@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { TaskForm } from "@/components/TaskForm";
 import { TaskList } from "@/components/TaskList";
 import type { Profile, Task, TaskStatus } from "@/lib/types";
@@ -17,8 +17,6 @@ export default function Home() {
   const [session, setSession] = useState<SessionState>({ state: "loading" });
   const [tasks, setTasks] = useState<Task[]>([]);
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
-  const [searchText, setSearchText] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -48,14 +46,12 @@ export default function Home() {
     }
   }, []);
 
-  const loadTasks = useCallback(async (nextStatus: TaskStatus | "all" = statusFilter, qText = debouncedSearch) => {
+  const loadTasks = useCallback(async (nextStatus: TaskStatus | "all" = statusFilter) => {
     setBusy(true);
     setError(null);
     try {
       const qs = new URLSearchParams();
       if (nextStatus !== "all") qs.set("status", nextStatus);
-      const q = qText.trim();
-      if (q) qs.set("q", q);
       const res = await fetch(`/api/tasks?${qs.toString()}`, { method: "GET" });
       if (!res.ok) {
         const j = (await res.json().catch(() => null)) as { error?: string } | null;
@@ -68,12 +64,7 @@ export default function Home() {
     } finally {
       setBusy(false);
     }
-  }, [debouncedSearch, statusFilter]);
-
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(searchText), 250);
-    return () => clearTimeout(t);
-  }, [searchText]);
+  }, [statusFilter]);
 
   useEffect(() => {
     void (async () => {
@@ -89,17 +80,11 @@ export default function Home() {
 
   useEffect(() => {
     if (session.state !== "authed") return;
-    void loadTasks(statusFilter, debouncedSearch);
-  }, [debouncedSearch, session.state, loadTasks, statusFilter]);
+    void loadTasks(statusFilter);
+  }, [session.state, loadTasks, statusFilter]);
 
   if (session.state === "loading") {
-    return (
-      <div className="wm-bg flex min-h-dvh items-center justify-center">
-        <div className="wm-card-2 px-5 py-4 text-sm text-[rgba(232,235,245,0.72)]">
-          Đang tải...
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (session.state === "anon") {
@@ -128,43 +113,11 @@ export default function Home() {
 
   return (
     <AppShell profile={session.profile}>
-      <div className="space-y-4">
-        <div className="sticky top-16 z-10">
-          <div className="wm-card p-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0">
-                <h1 className="truncate text-base font-semibold tracking-tight text-black">Work Management</h1>
-                <div className="mt-1 text-xs text-black/70">
-                  Tìm nhanh công việc theo tiêu đề / mô tả
-                </div>
-              </div>
-              <div className="relative w-full sm:max-w-sm">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/50" />
-                <input
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  placeholder="Search…"
-                  className="wm-input pl-10 pr-10"
-                />
-                {searchText ? (
-                  <button
-                    type="button"
-                    onClick={() => setSearchText("")}
-                    className="absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-xl hover:bg-black/5"
-                    aria-label="Clear search"
-                  >
-                    <X className="h-4 w-4 text-black/60" />
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        </div>
-
+      <div className="min-h-dvh space-y-4">
         <div className="wm-card p-4">
           <TaskForm
             onCreated={() => {
-              void loadTasks(statusFilter, debouncedSearch);
+              void loadTasks(statusFilter);
             }}
           />
         </div>
@@ -177,9 +130,9 @@ export default function Home() {
               onChange={(e) => {
                 const next = e.target.value as TaskStatus | "all";
                 setStatusFilter(next);
-                void loadTasks(next, debouncedSearch);
+                void loadTasks(next);
               }}
-              className="h-9 rounded-xl border border-white/10 bg-white/[0.05] px-3 text-sm text-white outline-none hover:bg-white/[0.08]"
+              className="h-9 rounded-xl border border-black/10 bg-white/70 px-3 text-sm text-black outline-none hover:bg-white"
             >
               <option value="all">Tất cả</option>
               <option value="pending">Pending</option>
@@ -200,7 +153,7 @@ export default function Home() {
             <TaskList
               tasks={filtered}
               busy={busy}
-              onChanged={() => void loadTasks(statusFilter, debouncedSearch)}
+              onChanged={() => void loadTasks(statusFilter)}
             />
           </div>
         </div>

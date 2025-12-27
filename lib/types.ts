@@ -61,6 +61,7 @@ export type TaskComment = {
   id: string;
   task_id: string;
   author_id?: string | null;
+  attachment_id?: string | null;
   content: string;
   created_at?: string;
   author?: {
@@ -68,6 +69,7 @@ export type TaskComment = {
     email?: string | null;
     role?: UserRole;
   } | null;
+  attachment?: (TaskAttachment & { url?: string | null }) | null;
 };
 
 export type Team = {

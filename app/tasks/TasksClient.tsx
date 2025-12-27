@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Search, X } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { TaskList } from "@/components/TaskList";
 import type { Profile, Task, TaskStatus } from "@/lib/types";
 
@@ -132,13 +133,7 @@ export function TasksClient() {
   }, [dueSoonDays, overdue, tasks]);
 
   if (session.state === "loading") {
-    return (
-      <div className="wm-bg flex min-h-dvh items-center justify-center">
-        <div className="rounded-2xl border border-zinc-200 bg-white px-5 py-4 text-sm text-zinc-600 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
-          Đang tải...
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (session.state === "anon") {

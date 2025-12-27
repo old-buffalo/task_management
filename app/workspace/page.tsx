@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AppShell } from "@/components/AppShell";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { WorkspacePanel } from "@/components/WorkspacePanel";
 import type { Profile } from "@/lib/types";
 
@@ -41,11 +42,7 @@ export default function WorkspacePage() {
   }, [loadMe]);
 
   if (session.state === "loading") {
-    return (
-      <div className="wm-bg flex min-h-dvh items-center justify-center">
-        <div className="wm-card-2 px-5 py-4 text-sm text-black/70">Đang tải...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (session.state === "anon") {
